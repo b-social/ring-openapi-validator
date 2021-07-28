@@ -1,15 +1,8 @@
-# ring-openapi-validator
+# NAME
 
-Validate ring requests and responses against Swagger v2 / OpenAPI v3
-specifications. Uses [Atlassian's Swagger Request
-Validator](https://bitbucket.org/atlassian/swagger-request-validator/src/master/)
-to do the actual validation.
+ring-openapi-validator
 
-## Dependency coordinates
-
-    [nl.jomco/ring-openapi-validator "0.1.1"]
-
-## Usage
+# SYNOPSIS
 
       (require '[nl.jomco.ring-openapi-validator :as validator])
       
@@ -19,6 +12,19 @@ to do the actual validation.
                                                         ring-request ring-response)]
         (doseq [issue issues]
           (prn issue)))
+
+# DESCRIPTION
+
+Validate ring requests and responses against Swagger v2 / OpenAPI v3
+specifications. Uses [Atlassian's Swagger Request
+Validator](https://bitbucket.org/atlassian/swagger-request-validator/src/master/)
+to do the actual validation.
+
+## Dependency coordinates
+
+    [nl.jomco/ring-openapi-validator "0.1.2"]
+
+[![](https://cljdoc.org/badge/nl.jomco/ring-openapi-validator)](https://cljdoc.org/jump/release/nl.jomco/ring-openapi-validator)
 
 ## Documentation
 
