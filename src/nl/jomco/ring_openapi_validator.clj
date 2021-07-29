@@ -179,7 +179,7 @@
   handler.
 
       (-> my-api-handler
-          (wrap-validator (openapi-validator \"path/to/spec.json\"))
+          (wrap-request-validator (openapi-validator \"path/to/spec.json\"))
           (wrap-json-response))
 
   Since the error response body is just clojure map, you need some other
