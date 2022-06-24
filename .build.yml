@@ -1,0 +1,10 @@
+image: archlinux
+packages:
+  - leiningen
+sources:
+  - https://git.sr.ht/~jomco/ring-openapi-validator
+tasks:
+  - test: |
+      cd ring-openapi-validator
+      lein test
+      lein lint
