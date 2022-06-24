@@ -30,7 +30,8 @@ API documentation is available inline and at [cljdoc](https://cljdoc.org/d/nl.jo
 
 ## License
 
-Copyright © 2020 - 2021 Joost Diepenmaat
+Copyright © 2020 - 2022 Joost Diepenmaat\
+Copyright © 2022 Jomco BV
 
 This program and the accompanying materials are made available under the
 terms of the Eclipse Public License 2.0 which is available at
