@@ -22,13 +22,11 @@ to do the actual validation.
 
 ## Dependency coordinates
 
-    [nl.jomco/ring-openapi-validator "0.1.2"]
-
-[![](https://cljdoc.org/badge/nl.jomco/ring-openapi-validator)](https://cljdoc.org/jump/release/nl.jomco/ring-openapi-validator)
+[![Clojars Project](https://img.shields.io/clojars/v/nl.jomco/ring-openapi-validator.svg)](https://clojars.org/nl.jomco/ring-openapi-validator)
 
 ## Documentation
 
-API documentation is available inline and at [cljdoc](https://cljdoc.org/d/nl.jomco/ring-openapi-validator/CURRENT).
+API documentation is available inline and at [cljdoc](https://cljdoc.org/d/nl.jomco/ring-openapi-validator/CURRENT). [![](https://cljdoc.org/badge/nl.jomco/ring-openapi-validator)](https://cljdoc.org/jump/release/nl.jomco/ring-openapi-validator)
 
 ## License
 
