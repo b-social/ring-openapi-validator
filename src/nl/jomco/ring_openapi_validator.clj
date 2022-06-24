@@ -6,6 +6,7 @@
            com.atlassian.oai.validator.model.Response
            com.atlassian.oai.validator.report.ValidationReport$Level
            com.atlassian.oai.validator.report.ValidationReport$MessageContext$Location
+           com.atlassian.oai.validator.report.LevelResolverFactory
            java.util.Optional))
 
 (def ^:private ring->Method
@@ -115,15 +116,22 @@
    - `:base-path` overrides the base path in the spec.
    - `:inline? true` indicate that `spec` is the specification body
       as a string, instead of a url or path
+   - `:ignore-additional-properties? true` will disable errors on
+      additional properties. This can help if you use `allOf` schemas. See also
+      https://bitbucket.org/atlassian/swagger-request-validator/src/master/docs/FAQ.md
 
   If you need to customize the validator you can create a builder using
   `com.atlassian.oai.validator.OpenApiInteractionValidator/createFor`"
-  ([spec {:keys [base-path inline?]}]
+  ([spec {:keys [base-path inline? ignore-additional-properties?]}]
    (cond-> (if inline?
              (OpenApiInteractionValidator/createForInlineApiSpecification spec)
              (OpenApiInteractionValidator/createFor spec))
      base-path
      (.withBasePathOverride base-path)
+
+     ignore-additional-properties?
+     (.withLevelResolver (LevelResolverFactory/withAdditionalPropertiesIgnored))
+
      true
      (.build)))
   ([spec]
