@@ -1,17 +1,12 @@
 (ns nl.jomco.ring-openapi-validator
-  (:require [clojure.string :as string]
-            [cheshire.core :as json])
+  (:require [clojure.string :as string])
   (:import com.atlassian.oai.validator.OpenApiInteractionValidator
            com.atlassian.oai.validator.model.Request
            com.atlassian.oai.validator.model.Request$Method
            com.atlassian.oai.validator.model.Response
-           com.atlassian.oai.validator.model.StringBody
-           com.atlassian.oai.validator.report.ValidationReport
            com.atlassian.oai.validator.report.ValidationReport$Level
            com.atlassian.oai.validator.report.ValidationReport$MessageContext$Location
-           java.util.Optional
-           java.nio.charset.Charset
-           java.nio.charset.StandardCharsets))
+           java.util.Optional))
 
 (def ^:private ring->Method
   {:get     Request$Method/GET
@@ -44,32 +39,32 @@
   [{:keys [uri request-method body query-params headers]}]
   (let [headers (normalize-headers headers)]
     (reify Request
-      (getPath [this]
+      (getPath [_]
         uri)
-      (getMethod [this]
+      (getMethod [_]
         (ring->Method request-method))
-      (getBody [this]
+      (getBody [_]
         (Optional/ofNullable body))
-      (getQueryParameters [this]
+      (getQueryParameters [_]
         (->> query-params
              keys
              (map name)))
-      (getQueryParameterValues [this n]
+      (getQueryParameterValues [_ n]
         (->coll (get query-params n)))
-      (getHeaders [this]
+      (getHeaders [_]
         headers)
-      (getHeaderValues [this n]
+      (getHeaderValues [_ n]
         (->coll (get headers (string/lower-case n)))))))
 
 (defn- ring->Response
-  [{:keys [status body headers] :as response}]
+  [{:keys [status body headers]}]
   (let [headers (normalize-headers headers)]
     (reify Response
-      (getStatus [this]
+      (getStatus [_]
         status)
-      (getBody [this]
+      (getBody [_]
         (Optional/ofNullable body))
-      (getHeaderValues [this n]
+      (getHeaderValues [_ n]
         (->coll (get headers (string/lower-case n)))))))
 
 (def ^:private Level->key
@@ -78,17 +73,31 @@
    ValidationReport$Level/INFO   :info
    ValidationReport$Level/WARN   :warn})
 
-(defn- Message->map
-  [msg]
-  {:key             (.getKey msg)
-   :message         (.getMessage msg)
-   :level           (Level->key (.getLevel msg))
-   :additional-info (.getAdditionalInfo msg)
-   :nested-messages (map Message->map (.getNestedMessages msg))})
-
 (def ^:private Location->key
   {ValidationReport$MessageContext$Location/REQUEST  :request
    ValidationReport$MessageContext$Location/RESPONSE :response})
+
+(defn- opt->val
+  "Convert java.util.Optional to a nillable value."
+  [x]
+  (.orElse x nil))
+
+(defn- Message->map
+  [msg]
+  (let [location (some-> msg
+                         .getContext
+                         opt->val
+                         .getLocation
+                         opt->val
+                         Location->key)]
+    (cond->
+        {:key             (.getKey msg)
+         :message         (.getMessage msg)
+         :level           (Level->key (.getLevel msg))
+         :additional-info (.getAdditionalInfo msg)
+         :nested-messages (map Message->map (.getNestedMessages msg))}
+      location
+      (assoc :location location))))
 
 (defn- report->coll
   [report]
@@ -102,14 +111,14 @@
   `spec` is a url or path to resource describing a Swagger or OpenApi
   specification.
 
-  `opts` is an optional map of options:
+  Second argument is an optional map of options:
    - `:base-path` overrides the base path in the spec.
    - `:inline? true` indicate that `spec` is the specification body
       as a string, instead of a url or path
 
   If you need to customize the validator you can create a builder using
   `com.atlassian.oai.validator.OpenApiInteractionValidator/createFor`"
-  ([spec {:keys [base-path inline?] :as opts}]
+  ([spec {:keys [base-path inline?]}]
    (cond-> (if inline?
              (OpenApiInteractionValidator/createForInlineApiSpecification spec)
              (OpenApiInteractionValidator/createFor spec))

@@ -49,7 +49,11 @@
                                                    ooapi-invalid-response)]
         (is (= "validation.response.body.schema.required"
                (get-in report [0 :key]))
-            "Report on missing property")))
+            "Report on missing property")
+
+        (is (= :response
+               (get-in report [0 :location]))
+            "Report on location of error")))
     (testing "request"
       (is (nil? (validator/validate-request validator ooapi-request)))
       (is (= "validation.request.operation.notAllowed"
