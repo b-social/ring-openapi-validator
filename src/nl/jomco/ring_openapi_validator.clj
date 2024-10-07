@@ -7,7 +7,8 @@
            com.atlassian.oai.validator.report.ValidationReport$Level
            com.atlassian.oai.validator.report.ValidationReport$MessageContext$Location
            com.atlassian.oai.validator.report.LevelResolverFactory
-           java.util.Optional))
+           java.util.Optional
+           (java.io InputStream)))
 
 (def ^:private ring->Method
   {:get     Request$Method/GET
@@ -92,11 +93,11 @@
                          opt->val
                          Location->key)]
     (cond->
-        {:key             (.getKey msg)
-         :message         (.getMessage msg)
-         :level           (Level->key (.getLevel msg))
-         :additional-info (.getAdditionalInfo msg)
-         :nested-messages (map Message->map (.getNestedMessages msg))}
+     {:key             (.getKey msg)
+      :message         (.getMessage msg)
+      :level           (Level->key (.getLevel msg))
+      :additional-info (.getAdditionalInfo msg)
+      :nested-messages (map Message->map (.getNestedMessages msg))}
       location
       (assoc :location location))))
 
@@ -170,7 +171,7 @@
 ;; immutable means there's no way to tell when we're "done" with the
 ;; request body.
 
-(defn- immutable-request-body
+(defn immutable-request-body
   "Replace mutable InputStream body with the equivalent re-readable content.
 
   Ensures that any multiple handlers/middleware can read the body
@@ -178,7 +179,7 @@
 
   Returns a new ring request"
   [{:keys [body] :as request}]
-  (if (instance? java.io.InputStream body)
+  (if (instance? InputStream body)
     (assoc request :body (slurp body))
     request))
 
