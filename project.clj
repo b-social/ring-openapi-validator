@@ -5,6 +5,8 @@
             :url  "https://www.eclipse.org/legal/epl-2.0/"}
   :dependencies [[com.atlassian.oai/swagger-request-validator-core "2.28.1"]
                  [io.swagger.parser.v3/swagger-parser "2.1.1"]]
+  :managed-dependencies [[com.fasterxml.jackson.core/jackson-core "2.18.6"]
+                         [commons-io/commons-io "2.14.0"]]
   :profiles {:dev {:resource-paths ["dev-resources"]
                    :dependencies [[clj-kondo "2022.06.22"]]
                    :plugins      [[lein-kibit "0.1.8"]
