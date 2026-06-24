@@ -1,3 +1,6 @@
 {:paths ["src"]
  :deps {com.atlassian.oai/swagger-request-validator-core {:mvn/version "2.28.1"}
-        io.swagger.parser.v3/swagger-parser {:mvn/version "2.1.1"}}}
+        io.swagger.parser.v3/swagger-parser {:mvn/version "2.1.1"}
+        com.fasterxml.jackson.core/jackson-core {:mvn/version "2.18.6"}
+        com.fasterxml.jackson.core/jackson-databind {:mvn/version "2.13.4.2"}
+        commons-io/commons-io {:mvn/version "2.14.0"}}}
